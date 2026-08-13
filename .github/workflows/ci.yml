@@ -1,0 +1,38 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run pytest
+        run: pytest tests/ -v
+
+      - name: Generate test data
+        run: python jobs/generar_datos.py
+
+      - name: Simulate ingestion (local copy)
+        run: |
+          cp data/input/ordenes.parquet data/output/ordenes_raw.parquet
+
+      - name: Run dbt
+        run: |
+          dbt seed --project-dir dbt --profiles-dir dbt
+          dbt run --project-dir dbt --profiles-dir dbt
+          dbt test --project-dir dbt --profiles-dir dbt
