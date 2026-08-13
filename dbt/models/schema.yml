@@ -1,0 +1,47 @@
+version: 2
+
+models:
+  - name: orders_raw
+    description: "Órdenes crudas leídas desde Parquet con ingreso_total calculado"
+    columns:
+      - name: order_id
+        description: "Identificador único de la orden"
+        tests:
+          - not_null
+          - unique
+      - name: cantidad
+        tests:
+          - not_null
+      - name: precio_unitario
+        tests:
+          - not_null
+      - name: estado
+        tests:
+          - accepted_values:
+              values: ['completada', 'cancelada', 'pendiente']
+
+  - name: orders_clean
+    description: "Órdenes limpias: sin canceladas, con categoría validada"
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - unique
+      - name: categoria
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Tecnología', 'Indumentaria', 'Alimentos']
+      - name: ingreso_total
+        tests:
+          - not_null
+
+  - name: orders_daily_metrics
+    description: "Métricas diarias agregadas por producto y categoría"
+    columns:
+      - name: fecha
+        tests:
+          - not_null
+      - name: ingreso_total
+        tests:
+          - not_null
