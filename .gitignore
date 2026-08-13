@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.env
+data/input/*.parquet
+data/output/*.parquet
+*.duckdb
+*.duckdb.wal
+venv/
+.venv/
+target/
+logs/
