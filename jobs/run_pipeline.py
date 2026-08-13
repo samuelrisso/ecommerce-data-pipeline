@@ -37,9 +37,9 @@ def main():
             "df.to_parquet('data/output/ordenes_raw.parquet', index=False); "
             "print(f'[ingest] {len(df)} órdenes copiadas a data/output/')"
         ]),
-        ("dbt run", [sys.executable, "-m", "dbt", "run",
+        ("dbt run", ["dbt", "run",
             "--project-dir", "dbt", "--profiles-dir", "dbt"]),
-        ("dbt test", [sys.executable, "-m", "dbt", "test",
+        ("dbt test", ["dbt", "test",
             "--project-dir", "dbt", "--profiles-dir", "dbt"]),
     ]
 
